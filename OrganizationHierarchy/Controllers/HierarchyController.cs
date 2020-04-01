@@ -50,15 +50,6 @@ namespace OrganizationHierarchy.Controllers
             return username;
         }
 
-       /* [HttpGet("DepartmentId")]
-        public ActionResult GetDepartmentId(string Departmentname)
-        {
-            OrganizationHierarchyContext context = new OrganizationHierarchyContext();
-            //var DepartmentId = context.DesignationInformation.SqlQuery("select DepartmentId from DepartmentInformation where DepartmentName = @p0", DepartmentName).ToList();
-            var DepartmentId = ()
-            return DepartmentId;
-        }*/
-
        /* [HttpPost("registerUser")]
         public int RegisterUser(RegisteredUsers user)
         {
