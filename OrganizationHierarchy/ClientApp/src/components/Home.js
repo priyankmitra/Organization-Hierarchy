@@ -35,9 +35,11 @@ const constOptions = {
     series: [{
         type: 'organization',
         name: 'Highsoft',
+        linkRadius: 0,
+        linkLineWidth: 2,
         keys: ['from', 'to'],
         data: [["NAV", "Sudha Gupta"],
-        ["NAV", "Nav Gupta"]],
+            ["NAV", "Nav Gupta"]],
         levels: [{
             level: 0,
             color: 'silver',
@@ -55,6 +57,7 @@ const constOptions = {
         }, {
             level: 2,
             color: '#980104'
+
         }, {
             level: 4,
             color: '#359154'
@@ -66,7 +69,7 @@ const constOptions = {
             color: 'white'
         },
         borderColor: 'white',
-        nodeWidth: 70
+        nodeWidth: 80
     }],
     tooltip:
     {
@@ -169,7 +172,7 @@ export class Home extends Component {
             singleUser.id = data[i].employeeUsername;
             singleUser.name = data[i].employeeUsername;
             singleUser.title = data[i].designation;
-            singleUser.info = "Department" + data[i].department;
+            singleUser.description = data[i].departmentName;
             allUsers.push(singleUser);
         }
 

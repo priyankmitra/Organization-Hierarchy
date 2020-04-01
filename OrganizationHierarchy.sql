@@ -56,8 +56,10 @@ insert into RegisteredUsers values ('PRIYANK MITRA', 'priyankm@navbackoffice.com
 insert into RegisteredUsers values ('Sajal Gupta', 'sajag@navbackoffice.com','',1,1,11,'Anil K Modest',1);
 insert into RegisteredUsers values ('Manoj Baijal','manojb@navbackoffice.com','',1,1,5,'Mukesh Singhal',1);
 insert into RegisteredUsers values ('Raj Malhotra','manojb@navbackoffice.com','',1,1,5,'Mukesh Singhal',1);
+insert into RegisteredUsers values ('Ram Malhotra','manojb@navbackoffice.com','',1,1,5,'Ajay Dixit',1);
 select * from RegisteredUsers;
 
 delete from RegisteredUsers where EmployeeUsername = 'Priyank Mitra';
+delete from RegisteredUsers where EmployeeUsername = 'Ram Malhotra';
 
 delete from RegisteredUsers where EmployeeUsername = 'Manoj Baijal';
