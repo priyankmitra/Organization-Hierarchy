@@ -50,19 +50,7 @@ namespace OrganizationHierarchy.Controllers
             return username;
         }
 
-       /* [HttpPost("registerUser")]
-        public int RegisterUser(RegisteredUsers user)
-        {
-            System.Diagnostics.Debug.WriteLine(user.EmployeeUsername.ToString());
-            //jsonString = "{ \"EmployeeUsername\":\"b\",\"Email\":\"a\",\"Profilepic\":\"a\",\"DepartmentId\":\"1\",\"DesignationId\":\"2\",\"OfficeId\":\"3\"}";
-            // RegisteredUsers user = JsonConvert.DeserializeObject<RegisteredUsers>(jsonString);
-            
-            OrganizationHierarchyContext entity = new OrganizationHierarchyContext();
-            entity.RegisteredUsers.Add(user);
-            entity.SaveChanges();
-            return 1; 
-        }*/
-
+       
         [HttpPost]
         [Route("registerUser")]
         public int Post([FromForm]UserInformation user)
