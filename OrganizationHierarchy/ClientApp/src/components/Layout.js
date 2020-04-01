@@ -5,10 +5,14 @@ import { NavMenu } from './NavMenu';
 export class Layout extends Component {
   static displayName = Layout.name;
 
-  render () {
+    constructor(props) {
+        super(props);
+        
+    }
+    render() {
     return (
       <div>
-        <NavMenu />
+        <NavMenu username={this.props.username} />
         <Container>
           {this.props.children}
         </Container>

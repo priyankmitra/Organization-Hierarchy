@@ -10,8 +10,8 @@ export class NavMenu extends Component {
     super(props);
 
     this.toggleNavbar = this.toggleNavbar.bind(this);
-    this.state = {
-      collapsed: true
+      this.state = {
+       collapsed: true
     };
   }
 
@@ -21,27 +21,23 @@ export class NavMenu extends Component {
     });
   }
 
-  render () {
+    render() {
     return (
       <header>
         <Navbar className="navbar-expand-sm navbar-toggleable-sm ng-white border-bottom box-shadow mb-3" light>
           <Container>
-            <NavbarBrand tag={Link} to="/">OrganizationHierarchy</NavbarBrand>
+            <NavbarBrand tag={Link} to="/">Organization Hierarchy</NavbarBrand>
             <NavbarToggler onClick={this.toggleNavbar} className="mr-2" />
             <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={!this.state.collapsed} navbar>
-              <ul className="navbar-nav flex-grow">
-                <NavItem>
-                  <NavLink tag={Link} className="text-dark" to="/">Home</NavLink>
-                </NavItem>
-                
-                <NavItem>
-                  <NavLink tag={Link} className="text-dark" to="/fetch-data">Fetch data</NavLink>
-                </NavItem>
+                        <ul className="navbar-nav flex-grow">
+                            <li>Logged in as:  {this.props.username}</li>
               </ul>
             </Collapse>
           </Container>
         </Navbar>
       </header>
     );
-  }
+    }
+
+    
 }

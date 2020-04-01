@@ -2,21 +2,36 @@ import React, { Component } from 'react';
 import { Route } from 'react-router';
 import { Layout } from './components/Layout';
 import { Home } from './components/Home';
-import { FetchData } from './components/FetchData';
-import { Counter } from './components/Counter';
+
 
 import './custom.css'
 
 export default class App extends Component {
   static displayName = App.name;
 
-  render () {
-    return (
-      <Layout>
-        <Route exact path='/' component={Home} />
-        <Route path='/counter' component={Counter} />
-        <Route path='/fetch-data' component={FetchData} />
-      </Layout>
+    constructor(props) {
+        super(props);
+        this.state = {
+            username : ""
+        }
+    }
+
+    componentDidMount() {
+        this.populateUsernaameData();
+    }
+    render() {
+        
+      return (
+        <div>
+            <Layout username={this.state.username} />
+            <Home username={this.state.username} />
+        </div>
     );
-  }
+    }
+    async populateUsernaameData() {
+        const response = await fetch('api/username');
+        const data = await response.json();
+        this.setState({username : data[0]});
+
+    }
 }
