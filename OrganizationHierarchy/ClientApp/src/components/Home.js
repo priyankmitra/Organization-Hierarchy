@@ -34,9 +34,9 @@ const constOptions = {
     },
     series: [{
         type: 'organization',
-        name: 'Highsoft',
+        name: 'Highsoft',/*
         linkRadius: 0,
-        linkLineWidth: 2,
+        linkLineWidth: 2,*/
         keys: ['from', 'to'],
         data: [["NAV", "Sudha Gupta"],
             ["NAV", "Nav Gupta"]],
