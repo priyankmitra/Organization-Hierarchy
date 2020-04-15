@@ -4,6 +4,8 @@ export class RegistrationForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            EmployeeId : 1,
+            DisplayName : "",
             ReportingManagerUserName:"",
             EmployeeUsername: "",
             Email: "",
@@ -14,6 +16,8 @@ export class RegistrationForm extends Component {
             Office: "",
             Region: ""
         };
+        this.setAdData();
+        console.log(this.state);
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -43,22 +47,33 @@ export class RegistrationForm extends Component {
     render() {
         return <div class="ui navy blue inverted segment" style={{ marginLeft: 400, marginRight: 400, marginTop: 20 }}>
             <Form onSubmit={this.handleSubmit} >
-
+                <Form.Field fluid>
+                    <label>Employee Id</label>
+                    <Input readonly="" type='employeeId' name='EmployeeId' placeholder='Employee Id' defaultValue={this.state.EmployeeId} onChange={this.handleChange} />
+                </Form.Field>
+                <Form.Field fluid>
+                    <label>Employee Display Name</label>
+                    <Input readonly="" type='displayname' name='DisplayName' placeholder='Display Name' defaultValue={this.state.DisplayName} onChange={this.handleChange} />
+                </Form.Field>
                 <Form.Field fluid>
                     <label>Employee Username</label>
-                    <Input type='name' name='EmployeeUsername' placeholder='Username' defaultValue={this.state.EmployeeUsername} onChange={this.handleChange} />
+                    <Input readonly="" type='name' name='EmployeeUsername' placeholder='Username' defaultValue={this.state.EmployeeUsername} onChange={this.handleChange} />
+                </Form.Field>
+                <Form.Field fluid>
+                    <label>Reporting Manager</label>
+                    <Input readonly="" type='ReportingManagerUserName' name='ReportingManagerUserName' placeholder='Reporting Manager' defaultValue={this.state.ReportingManagerUserName} onChange={this.handleChange} />
                 </Form.Field>
                 <Form.Field fluid>
                     <label>Email</label>
-                    <Input type='email' name='Email' placeholder='example@gmail.com' defaultValue={this.state.Email} onChange={this.handleChange} />
+                    <Input readonly="" type='email' name='Email' placeholder='example@gmail.com' defaultValue={this.state.Email} onChange={this.handleChange} />
                 </Form.Field>
                 <Form.Field fluid>
                     <label>Designation</label>
-                    <Input type='designation' name='Designation' placeholder='enter designation name' defaultValue={this.state.Designation} onChange={this.handleChange} />
+                    <Input readonly="" type='designation' name='Designation' placeholder='enter designation name' defaultValue={this.state.Designation} onChange={this.handleChange} />
                 </Form.Field>
                 <Form.Field fluid>
                     <label>Department Name</label>
-                    <Input type='department' name='DepartmentName' placeholder='enter department name' defaultValue={this.state.DepartmentName} onChange={this.handleChange} />
+                    <Input readonly="" type='department' name='DepartmentName' placeholder='enter department name' defaultValue={this.state.DepartmentName} onChange={this.handleChange} />
                 </Form.Field>
                 {/*<Form.Field fluid>
                     <label>Profilepic</label>
@@ -72,11 +87,11 @@ export class RegistrationForm extends Component {
                 </Form.Field>*/}
                 <Form.Field fluid>
                     <label>OfficeName</label>
-                    <Input type='office' name='Office' placeholder='enter region' defaultValue={this.state.Office} onChange={this.handleChange} />
+                    <Input readonly="" type='office' name='Office' placeholder='enter region' defaultValue={this.state.Office} onChange={this.handleChange} />
                 </Form.Field>
                 <Form.Field fluid>
                     <label>Region</label>
-                    <Input type='region' name='Region' placeholder='enter office' defaultValue={this.state.Region} onChange={this.handleChange} />
+                    <Input readonly="" type='region' name='Region' placeholder='enter office' defaultValue={this.state.Region} onChange={this.handleChange} />
                 </Form.Field>
                 <Grid>
                     <Grid.Column textAlign="center">
@@ -87,5 +102,19 @@ export class RegistrationForm extends Component {
                 </Grid>
             </Form>
         </div>
+    }
+
+    async setAdData() {
+        const response = await fetch('api/ad_data');
+        const data = await response.json();
+        console.log("3");
+        this.setState({
+            EmployeeId: data[0].employeeId,
+            DisplayName: data[0].displayName,
+            EmployeeUsername: data[0].employeeUsername,
+            Email: data[0].email,
+            Department: data[0].department,
+            
+        });
     }
 }

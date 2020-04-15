@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace OrganizationHierarchy.Models
 {
@@ -10,7 +9,7 @@ namespace OrganizationHierarchy.Models
         {
             RegisteredUsers = new HashSet<RegisteredUsers>();
         }
-        [Key]
+
         public int DepartmentId { get; set; }
         public string DepartmentName { get; set; }
 
