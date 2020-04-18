@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Route } from 'react-router';
 import { Layout } from './components/Layout';
 import { Home } from './components/Home';
-
+import { AddButton } from './components/AddButton';
 
 import './custom.css'
 
@@ -12,7 +12,8 @@ export default class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            username : ""
+            username: "",
+            isUserRegistered:0
         }
     }
 
@@ -20,18 +21,31 @@ export default class App extends Component {
         this.populateUsernaameData();
     }
     render() {
-        
-      return (
-        <div>
-            <Layout username={this.state.username} />
-            <Home username={this.state.username} />
-        </div>
-    );
+
+        if (this.state.isUserRegistered === 0) {
+            return (
+                <div>
+                    <Layout username={this.state.username} />
+                    <AddButton />
+                </div>
+            );
+        }
+        else {
+            return (
+                <div>
+                    <Layout username={this.state.username} />
+                    <Home username={this.state.username} isUserRegistered={this.state.isUserRegistered} />
+                </div>
+            );
+        }
+      
     }
     async populateUsernaameData() {
         const response = await fetch('api/username');
         const data = await response.json();
-        this.setState({username : data[0]});
+        const responseForRegisterUser = await fetch('api/isRegisteredUserOrNot');
+        const isUserRegistered = await responseForRegisterUser.json();
+        this.setState({ username: data[0], isUserRegistered: isUserRegistered});
 
     }
 }

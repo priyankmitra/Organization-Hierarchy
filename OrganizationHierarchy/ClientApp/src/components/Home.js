@@ -1,10 +1,18 @@
 import React, { Component } from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
-import { ButtonComponent } from './ButtonComponent';
-
+import { AddButton } from './AddButton';
+import { EditButton } from './EditButton';
+import { Modal, Button, Row, Col, Form } from 'react-bootstrap';
 import "./Home.css";
 import { PostCard } from './PostCard';
+
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Link
+} from "react-router-dom";
 
 require('highcharts/modules/sankey')(Highcharts);
 require('highcharts/modules/organization')(Highcharts);
@@ -47,41 +55,16 @@ const constOptions = {
             point: {
                 events: {
                     click: function (props) {
-                        alert('\nName:        ' + this.id + '\nTitle:          ' + this.title
+
+                        /*Popup(this);*/
+                        /*alert('\nName:        ' + this.id + '\nTitle:          ' + this.title
                             + '\nEmail:         ' + this.email + '\nOffice:        '+this.office);
                         postCardDetails.Name =  this.id;
                         postCardDetails.Title = this.title;
                         postCardDetails.Email= this.email;
                         postCardDetails.Office = this.office;
-                        showPostCard = true;
-                        /*const [show, setShow] = useState(false);
-
-                        const handleClose = () => setShow(false);
-                        const handleShow = () => setShow(true);
-
-                        return (
-                            <>
-                                <Button variant="primary" onClick={handleShow}>
-                                    Launch demo modal
-      </Button>
-
-                                <Modal show={show} onHide={handleClose}>
-                                    <Modal.Header closeButton>
-                                        <Modal.Title>Modal heading</Modal.Title>
-                                    </Modal.Header>
-                                    <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
-                                    <Modal.Footer>
-                                        <Button variant="secondary" onClick={handleClose}>
-                                            Close
-          </Button>
-                                        <Button variant="primary" onClick={handleClose}>
-                                            Save Changes
-          </Button>
-                                    </Modal.Footer>
-                                </Modal>
-                            </>
-                        );*/
-                        console.log(Home.showPostCard);
+                        showPostCard = true;*/
+                        
                     }
                 }
             }
@@ -139,61 +122,74 @@ const constOptions = {
 
 }
 
+
+/*
+function Show(props) {
+    return (*//*
+        <Router>
+        <div>
+                <Route path='/postcard'>*//*
+                    <PostCard />
+               *//* </Route>
+        </div>
+        </Router>*//*
+    );
+}*/
+
+
+/*function Popup(props) {
+        return (
+            <Modal
+                {...props}
+                size="lg"
+                aria-labelledby="contained-modal-title-vcenter"
+                centered
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title id="contained-modal-title-vcenter">
+                        Employee Detail
+        </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <div className="container">
+                        Contents
+                        </div>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button onClick={props.onHide}>Close</Button>
+                </Modal.Footer>
+            </Modal>
+        );
+}*/
+
 function DisplayChart(props) {
     return (
         <figure class="highcharts-figure">
             <div id="container">
-                
+
                 <HighchartsReact highcharts={Highcharts} options={props.stateOptions} />
             </div>
         </figure>
     );
 }
 
-function DisplayButton(props) {
-    return (
-        <div>
-            <ButtonComponent />
-        </div>
-    );
-        
-}
-
-function CheckRegisteredOrNot(props) {
-    const isUserRgistered = props.isUserRgistered;
-    
-    if (isUserRgistered==1)
-    {
-        if(props.showPostCard === false)
-            return <DisplayChart relationData={props.relation} nodeData={props.userNodes} stateOptions={props.stateOptions} />
-        else
-            return <PostCard/>
-    }
-    else
-        return <DisplayButton/>
-}
-
-
 export class Home extends Component {
     
     constructor(props) {
         super(props);
         this.state = {
-            relation: [], userNodes: [], stateOptions: {}, isUserRgistered : 0, showPostCard : false 
+            relation: [], userNodes: [], stateOptions: {}, isUserRgistered: this.props.isUserRegistered
         }
     }
 
-    componentDidMount() {
+    componentWillMount() {
         this.populateRegisteredUserData();
     }
 
     render() {
         return (
             <div>
-            
-                <CheckRegisteredOrNot isUserRgistered={this.state.isUserRegistered} relation={this.state.relation}
-                    userNodes={this.state.userNodes} stateOptions={this.state.stateOptions}
-                        showPostCard={showPostCard} />
+                <DisplayChart relationData={this.state.relation} nodeData={this.state.userNodes} stateOptions={this.state.stateOptions} />
             </div>
         );
     }
@@ -207,8 +203,8 @@ export class Home extends Component {
         const responseForregisteredUserInformation = await fetch('api/registeredUserInformation');
         const data = await responseForregisteredUserInformation.json();
 
-        const responseForRegisterUser = await fetch('api/isRegisteredUserOrNot');
-        const isUserRegistered  = await responseForRegisterUser.json();
+        /*const responseForRegisterUser = await fetch('api/isRegisteredUserOrNot');
+        const isUserRegistered  = await responseForRegisterUser.json();*/
 
         var i;
         for (i = 0; i < data.length; i++) {
@@ -230,7 +226,7 @@ export class Home extends Component {
             singleUser.description = data[i].departmentName;
             singleUser.email = data[i].email;
             singleUser.office = data[i].office;
-            singleUser.image = 'https://wp-assets.highcharts.com/www-highcharts-com/blog/wp-content/uploads/2018/11/12132314/AnneJorunn.jpg';
+            singleUser.image = data[i].profilepicPath;
             allUsers.push(singleUser);
         }
 
@@ -240,8 +236,7 @@ export class Home extends Component {
         nav.id = "NAV";
         constOptions.series[0].nodes.push(nav);
 
-       // console.log(isUserRegistered);
-        this.setState({ relation: relationTable, userNodes: allUsers, stateOptions: constOptions, isUserRegistered: isUserRegistered });
+        this.setState({ relation: relationTable, userNodes: allUsers, stateOptions: constOptions});
         
     }
 }

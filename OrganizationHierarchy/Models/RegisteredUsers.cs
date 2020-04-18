@@ -9,7 +9,7 @@ namespace OrganizationHierarchy.Models
         public string EmployeeUsername { get; set; }
         public string DisplayName { get; set; }
         public string Email { get; set; }
-        public string Profilepic { get; set; }
+        public byte[] Profilepic { get; set; }
         public int? UserRegisteredOrNot { get; set; }
         public int DepartmentId { get; set; }
         public int DesignationId { get; set; }

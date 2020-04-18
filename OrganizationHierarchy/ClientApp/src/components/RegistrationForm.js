@@ -9,7 +9,7 @@ export class RegistrationForm extends Component {
             ReportingManagerUserName:"",
             EmployeeUsername: "",
             Email: "",
-            Profilepic: "",
+            Profilepic: null,
             UserRegisteredOrNot: 0,
             DepartmentName: "",
             Designation: "",
@@ -46,6 +46,8 @@ export class RegistrationForm extends Component {
     }
     render() {
         return <div class="ui navy blue inverted segment" style={{ marginLeft: 400, marginRight: 400, marginTop: 20 }}>
+            <h1>Registration Form</h1>
+            <h4>Enter your details!</h4>
             <Form onSubmit={this.handleSubmit} >
                 <Form.Field fluid>
                     <label>Employee Id</label>
@@ -75,11 +77,11 @@ export class RegistrationForm extends Component {
                     <label>Department Name</label>
                     <Input readonly="" type='department' name='DepartmentName' placeholder='enter department name' defaultValue={this.state.DepartmentName} onChange={this.handleChange} />
                 </Form.Field>
-                {/*<Form.Field fluid>
+                <Form.Field fluid>
                     <label>Profilepic</label>
                     <Input type='file' name='profilepic' placeholder='example@gmail.com' onChange={this.handleChange} />
                 </Form.Field>
-                /*<Form.Field fluid label='ReportingManagerUsername' control='select' onChange={this.handleChange}>
+                {/*<Form.Field fluid label='ReportingManagerUsername' control='select' onChange={this.handleChange}>
                     <option value='anil'>Anil Kumar Modest</option>
                     <option value='puneet'>Puneet Singhal</option>
                     <option value='aniruddha'>Aniruddha Jain</option>

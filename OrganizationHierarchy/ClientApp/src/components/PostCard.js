@@ -1,4 +1,5 @@
 ﻿import React, { Component } from 'react';
+import { Modal, Button, Row, Col, Form } from 'react-bootstrap';
 import { Home } from './Home';
 
 
@@ -11,7 +12,27 @@ export class PostCard extends Component{
     }
     render() {
         return (
-            <div>
+            <Modal
+                {...this.props}
+                size="lg"
+                aria-labelledby="contained-modal-title-vcenter"
+                centered
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title id="contained-modal-title-vcenter">
+                        Employee Detail
+        </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <div className="container">
+                        Contents
+                        </div>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button onClick={this.props.onHide}>Close</Button>
+                </Modal.Footer>
+            </Modal>
+            /*<div>
                 <div class="ui link cards">
                     <div class="card">
                         <div class="image">
@@ -83,7 +104,7 @@ export class PostCard extends Component{
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>*/
         );
     }
         

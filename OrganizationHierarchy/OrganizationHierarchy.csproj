@@ -30,7 +30,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="ClientApp\src\components\EditDetails.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="ClientApp\src\components\Counter.js" />
+    <None Remove="ClientApp\src\components\EditDetails.cs" />
   </ItemGroup>
 
   <ItemGroup>

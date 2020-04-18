@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using OrganizationHierarchy.Models;
@@ -19,26 +20,41 @@ namespace OrganizationHierarchy.Controllers
         }
         OrganizationHierarchyContext context = new OrganizationHierarchyContext();
 
+
         [HttpGet("registeredUserInformation")]
 
         public IEnumerable<UserInformation> Getuser()
         {
-            var result = (from a in context.RegisteredUsers
-                              select new UserInformation
-                              {
-                                  EmployeeId = a.EmployeeId,
-                                  DisplayName = a.DisplayName,
-                                  EmployeeUsername = a.EmployeeUsername,
-                                  Email = a.Email,
-                                  Profilepic = a.Profilepic,
-                                  ReportingManagerUsername = a.ReportingManagerUsername,
-                                  UserRegisteredOrNot = a.UserRegisteredOrNot,
-                                  DepartmentName = a.Department.DepartmentName,
-                                  Designation = a.Designation.Designation,
-                                  Office = a.Office.OfficeName,
-                                  
-                              } 
-                         ).ToList();
+
+            string profilepicPath = null;
+            List<UserInformation> result = new List<UserInformation>();
+            foreach (var item in context.RegisteredUsers)
+            {
+                OrganizationHierarchyContext db = new OrganizationHierarchyContext();
+                string imreBase64Data = Convert.ToBase64String(item.Profilepic);
+                profilepicPath = string.Format("data:image/png;base64,{0}", imreBase64Data);
+
+
+                UserInformation user = new UserInformation();
+
+
+                user.EmployeeId = item.EmployeeId;
+                user.DisplayName = item.DisplayName;
+                user.EmployeeUsername = item.EmployeeUsername;
+                user.Email = item.Email;
+                user.ProfilepicPath = profilepicPath;
+                user.ReportingManagerUsername = item.ReportingManagerUsername;
+                user.UserRegisteredOrNot = item.UserRegisteredOrNot;
+                user.DepartmentName = db.DepartmentInformation.Where(x => x.DepartmentId.Equals(item.DepartmentId)).FirstOrDefault().DepartmentName;  //item.Department.DepartmentName,
+                user.Designation = db.DesignationInformation.Where(x => x.DesignationId.Equals(item.DesignationId)).FirstOrDefault().Designation; //item.Designation.Designation,
+                user.Office = db.OfficeInformation.Where(x => x.OfficeId.Equals(item.OfficeId)).FirstOrDefault().OfficeName;//item.Office.OfficeName,
+
+                
+                result.Add(user);
+                db.Dispose();
+
+            }
+
             return result;
         }
 
@@ -95,7 +111,7 @@ namespace OrganizationHierarchy.Controllers
                 context.SaveChanges();
                 return 1;
             }
-            else if (userPresentInRegistrationTableOrNot(user.EmployeeUsername) > 0 && (GetRegistration()==0))
+            else if (userPresentInRegistrationTableOrNot(user.EmployeeUsername) > 0 && (GetRegistration() == 0))
             {
                 var updatedUser = context.RegisteredUsers.Find(user.EmployeeUsername);
                 updatedUser.EmployeeId = user.EmployeeId;
@@ -116,7 +132,7 @@ namespace OrganizationHierarchy.Controllers
 
         [HttpPost]
         [Route("registerUser")]
-        public int Post([FromForm]UserInformation user)
+        public async System.Threading.Tasks.Task<int> PostAsync([FromForm]UserInformation user)
         {/*
             MyImages image = new MyImages { ImagePath = user1.Profilepic };
             
@@ -128,8 +144,13 @@ namespace OrganizationHierarchy.Controllers
             int departmentid = context.DepartmentInformation.Where(x => x.DepartmentName.Contains(user.DepartmentName)).FirstOrDefault().DepartmentId;
             int designationId = context.DesignationInformation.Where(x => x.Designation.Contains(user.Designation)).FirstOrDefault().DesignationId;
             int officeid = context.OfficeInformation.Where(x => x.OfficeName.Contains(user.Office)).FirstOrDefault().OfficeId;
-
             RegisteredUsers registeruser = new RegisteredUsers();
+            using (var stream = new MemoryStream())
+            {
+                await user.Profilepic.CopyToAsync(stream);
+                registeruser.Profilepic = stream.ToArray();
+            }
+
             registeruser.EmployeeId = user.EmployeeId;
             registeruser.DisplayName = user.DisplayName;
             registeruser.EmployeeUsername = user.EmployeeUsername;
