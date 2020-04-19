@@ -1,10 +1,12 @@
 ﻿import React, { Component } from 'react';
 import { Form, Input, Segment, Button, Grid } from 'semantic-ui-react';
+
+import { Home } from './Home';
 export class RegistrationForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            EmployeeId : 1,
+            EmployeeId : "",
             DisplayName : "",
             ReportingManagerUserName:"",
             EmployeeUsername: "",
@@ -14,10 +16,13 @@ export class RegistrationForm extends Component {
             DepartmentName: "",
             Designation: "",
             Office: "",
-            Region: ""
+            Region: "",
+            showChart: false,
+            RmList: []
+
         };
         this.setAdData();
-        console.log(this.state);
+        
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -29,7 +34,7 @@ export class RegistrationForm extends Component {
     handleSubmit(event) {
         event.preventDefault();
         //console.log(JSON.parse(JSON.stringify(this.state)));
-
+        
         const data = new FormData(event.target);
         console.log(this.state);
         console.log(data.get('ReportingManagerUsername'));
@@ -37,34 +42,35 @@ export class RegistrationForm extends Component {
             method: 'POST',
             body: data
 
-        }).then((response) => response.json())
-
-            .then((responseJson) => {
-                console.log(responseJson);
-
+        }).then((Response) => {
+            if (Response.status === 200) {
+                alert("User Successfully Registered.");
+            }
+            this.setState({
+                showChart: true
             });
+        }).catch((error) => console.log(error));
+        
     }
     render() {
-        return <div class="ui navy blue inverted segment" style={{ marginLeft: 400, marginRight: 400, marginTop: 20 }}>
+        return this.state.showChart ? <Home isUserRegistered={1}/> :<div class="ui navy blue inverted segment" style={{ marginLeft: 400, marginRight: 400, marginTop: 20 }}>
             <h1>Registration Form</h1>
             <h4>Enter your details!</h4>
-            <Form onSubmit={this.handleSubmit} >
+            
+            <Form onSubmit={this.handleSubmit}  >
                 <Form.Field fluid>
                     <label>Employee Id</label>
-                    <Input readonly="" type='employeeId' name='EmployeeId' placeholder='Employee Id' defaultValue={this.state.EmployeeId} onChange={this.handleChange} />
+                    <Input readOnly type='id' name='EmployeeId' placeholder='Employee Id' defaultValue={this.state.EmployeeId} onChange={this.handleChange} />
                 </Form.Field>
                 <Form.Field fluid>
                     <label>Employee Display Name</label>
-                    <Input readonly="" type='displayname' name='DisplayName' placeholder='Display Name' defaultValue={this.state.DisplayName} onChange={this.handleChange} />
+                    <Input readOnly type='displayname' name='DisplayName' placeholder='Display Name' defaultValue={this.state.DisplayName} onChange={this.handleChange} />
                 </Form.Field>
                 <Form.Field fluid>
                     <label>Employee Username</label>
-                    <Input readonly="" type='name' name='EmployeeUsername' placeholder='Username' defaultValue={this.state.EmployeeUsername} onChange={this.handleChange} />
+                    <Input readOnly type='name' name='EmployeeUsername' placeholder='Username' defaultValue={this.state.EmployeeUsername} onChange={this.handleChange} />
                 </Form.Field>
-                <Form.Field fluid>
-                    <label>Reporting Manager</label>
-                    <Input readonly="" type='ReportingManagerUserName' name='ReportingManagerUserName' placeholder='Reporting Manager' defaultValue={this.state.ReportingManagerUserName} onChange={this.handleChange} />
-                </Form.Field>
+                
                 <Form.Field fluid>
                     <label>Email</label>
                     <Input readonly="" type='email' name='Email' placeholder='example@gmail.com' defaultValue={this.state.Email} onChange={this.handleChange} />
@@ -75,20 +81,23 @@ export class RegistrationForm extends Component {
                 </Form.Field>
                 <Form.Field fluid>
                     <label>Department Name</label>
-                    <Input readonly="" type='department' name='DepartmentName' placeholder='enter department name' defaultValue={this.state.DepartmentName} onChange={this.handleChange} />
+                    <Input readOnly="" type='department' name='DepartmentName' placeholder='enter department name' defaultValue={this.state.DepartmentName} onChange={this.handleChange} />
                 </Form.Field>
+                <Form.Field fluid label='ReportingManagerUsername' name='ReportingManagerUserName' control='select' onChange={this.handleChange}>
+                    <option value=''>Select Reporting Manager</option>
+                    {this.state.RmList.map(rm =>
+
+                        <option key={rm.employeeId} value={rm.employeeUsername}>{rm.displayName}({rm.employeeUsername})</option>
+
+                    )}
+                </Form.Field>
+
                 <Form.Field fluid>
-                    <label>Profilepic</label>
+                    <label>Profile Picture</label>
                     <Input type='file' name='profilepic' placeholder='example@gmail.com' onChange={this.handleChange} />
                 </Form.Field>
-                {/*<Form.Field fluid label='ReportingManagerUsername' control='select' onChange={this.handleChange}>
-                    <option value='anil'>Anil Kumar Modest</option>
-                    <option value='puneet'>Puneet Singhal</option>
-                    <option value='aniruddha'>Aniruddha Jain</option>
-                    <option value='rahul'>Rahul Gupta</option>
-                </Form.Field>*/}
                 <Form.Field fluid>
-                    <label>OfficeName</label>
+                    <label>Office Name</label>
                     <Input readonly="" type='office' name='Office' placeholder='enter region' defaultValue={this.state.Office} onChange={this.handleChange} />
                 </Form.Field>
                 <Form.Field fluid>
@@ -109,14 +118,22 @@ export class RegistrationForm extends Component {
     async setAdData() {
         const response = await fetch('api/ad_data');
         const data = await response.json();
-        console.log("3");
+
+        const Rmresponse = await fetch('api/rm_data');
+        const RmData = await Rmresponse.json();
+
         this.setState({
+            
             EmployeeId: data[0].employeeId,
             DisplayName: data[0].displayName,
             EmployeeUsername: data[0].employeeUsername,
             Email: data[0].email,
-            Department: data[0].department,
-            
+            DepartmentName: data[0].department,
+            Designation: data[0].designation,
+            Office: data[0].officeName,
+            Region: data[0].region,
+            RmList: RmData
         });
+        console.log(this.state);
     }
 }

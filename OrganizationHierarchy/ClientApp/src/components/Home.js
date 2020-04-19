@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import { AddButton } from './AddButton';
-import { EditButton } from './EditButton';
+import { EditForm } from './EditForm';
 import { Modal, Button, Row, Col, Form } from 'react-bootstrap';
 import "./Home.css";
 import { PostCard } from './PostCard';
@@ -30,7 +30,7 @@ const postCardDetails = {
 
 const constOptions = {
     chart: {
-        height: 700,
+        height: 900,
         inverted: true
     },
 
@@ -54,9 +54,10 @@ const constOptions = {
             cursor: 'pointer',
             point: {
                 events: {
-                    click: function (props) {
-
-                        /*Popup(this);*/
+                    click: function () {
+                        this.showpostcard = 1;
+                        console.log(this.showpostcard);
+                        Popup(this);
                         /*alert('\nName:        ' + this.id + '\nTitle:          ' + this.title
                             + '\nEmail:         ' + this.email + '\nOffice:        '+this.office);
                         postCardDetails.Name =  this.id;
@@ -137,30 +138,14 @@ function Show(props) {
 }*/
 
 
-/*function Popup(props) {
-        return (
-            <Modal
-                {...props}
-                size="lg"
-                aria-labelledby="contained-modal-title-vcenter"
-                centered
-            >
-                <Modal.Header closeButton>
-                    <Modal.Title id="contained-modal-title-vcenter">
-                        Employee Detail
-        </Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <div className="container">
-                        Contents
-                        </div>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button onClick={props.onHide}>Close</Button>
-                </Modal.Footer>
-            </Modal>
-        );
-}*/
+function Popup(props) {
+
+
+
+        /*return (
+            <PostCard showpostcard={props.showpostcard} / >
+        );*/
+}
 
 function DisplayChart(props) {
     return (
@@ -178,20 +163,32 @@ export class Home extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            relation: [], userNodes: [], stateOptions: {}, isUserRgistered: this.props.isUserRegistered
+            relation: [], userNodes: [], stateOptions: {}, isUserRgistered: this.props.isUserRegistered,
+            showEditForm: false , showPopup:false
         }
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    componentWillMount() {
+    componentDidMount() {
+        console.log("data ayega");
         this.populateRegisteredUserData();
+        console.log("data aagaya");
+
+    }
+
+    handleSubmit() {
+        this.setState({
+            showEditForm: true
+        })
     }
 
     render() {
-        return (
-            <div>
-                <DisplayChart relationData={this.state.relation} nodeData={this.state.userNodes} stateOptions={this.state.stateOptions} />
-            </div>
-        );
+        
+        return this.state.showEditForm ? <EditForm /> : <div>
+            <Button onClick={this.handleSubmit} > Edit and Sync </Button>
+            <DisplayChart relationData={this.state.relation} nodeData={this.state.userNodes} stateOptions={this.state.stateOptions} />
+        </div>;
+        
     }
 
     async populateRegisteredUserData() {
@@ -202,9 +199,7 @@ export class Home extends Component {
 
         const responseForregisteredUserInformation = await fetch('api/registeredUserInformation');
         const data = await responseForregisteredUserInformation.json();
-
-        /*const responseForRegisterUser = await fetch('api/isRegisteredUserOrNot');
-        const isUserRegistered  = await responseForRegisterUser.json();*/
+        
 
         var i;
         for (i = 0; i < data.length; i++) {
@@ -227,6 +222,7 @@ export class Home extends Component {
             singleUser.email = data[i].email;
             singleUser.office = data[i].office;
             singleUser.image = data[i].profilepicPath;
+            singleUser.showpostcard = 0;
             allUsers.push(singleUser);
         }
 

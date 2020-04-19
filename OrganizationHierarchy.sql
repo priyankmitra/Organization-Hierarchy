@@ -77,28 +77,29 @@ delete from RegisteredUsers where EmployeeUsername = 'virats';
 create table TempAd
 (
 EmployeeId int primary key,  DisplayName varchar(50) , Email varchar(50) not null,
-EmployeeUsername varchar (50), Department varchar (50)
+EmployeeUsername varchar (50), Department varchar (50), Designation varchar(50), OfficeName varchar(50), Region varchar(50)
 );
+
 
 insert into TempAd
 values
-(1,'Sudha Gupta', 'sudhag@navbackoffice.com','sudhag','IT'),
-(2,'Mukesh Singhal','mukeshs@navbackoffice.com','mukeshs','IT'),
-(3,'Anil K Modest', 'anilk@navbackoffice.com','anilkm','IT'),
-(4,'Manoj Baijal','manojb@navbackoffice.com','manojb','IT'),
-(5,'Ajay Dixit','ajayd@navbackoffice.com','ajayd','IT'),
-(6,'Shubham Kumar', 'shubhamk@navbackoffice.com','shubhamk','IT'),
-(7,'Sajal Gupta','sajalg@navbackoffice.com','sajalg','IT'),
-(8,'PRIYANK MITRA','priyankm@navbackoffice.com','PRIYANK MITRA','IT'),
-(9,'Aakash Tanwar','aakasht@navbackoffice.com','aakasht','IT'),
-(10,'Ayush Goyal','ayushg@navbackoffice.com','ayushg','IT'),
-(11,'Tushar Bansal','tusharb@navbackoffice.com','tusharb','IT'),
-(12,'Chirag Sharma','chirags@navbackoffice.com','chirags','IT'),
-(13,'Honey Singhal','honeys@navbackoffice.com','honeys','IT'),
-(14,'Suyash Pathak','suyashp@navbackoffice.com','suyashp','IT'),
-(15,'Prayag Donariya','prayagd@navbackoffice.com','prayagd','IT'),
-(16,'Yash Kumar','yashk@navbackoffice.com','yashk','IT'),
-(17,'Virat Singh','virats@navbackoffice.com','virats','IT');
+(1,'Sudha Gupta', 'sudhag@navbackoffice.com','sudhag','IT','CTO','Coorporate Headquarters','Oakbrook Terrace,IL'),
+(2,'Mukesh Singhal','mukeshs@navbackoffice.com','mukeshs','IT','Technical Architect','Backoffice Center-1','Sitapura,Jaipur'),
+(3,'Anil K Modest', 'anilk@navbackoffice.com','anilkm','IT','Technical Architect','Backoffice Center-1','Sitapura,Jaipur'),
+(4,'Manoj Baijal','manojb@navbackoffice.com','manojb','IT','Technical Architect','Backoffice Center-1','Sitapura,Jaipur'),
+(5,'Ajay Dixit','ajayd@navbackoffice.com','ajayd','IT','Tech Lead','Backoffice Center-1','Sitapura,Jaipur'),
+(6,'Shubham Kumar', 'shubhamk@navbackoffice.com','shubhamk','IT','Senior Software Engineer','Backoffice Center-1','Sitapura,Jaipur'),
+(7,'Sajal Gupta','sajalg@navbackoffice.com','sajalg','IT','Intern','Backoffice Center-1','Sitapura,Jaipur'),
+(8,'Priyank Mitra','priyankm@navbackoffice.com','PRIYANK MITRA','IT','Intern','Backoffice Center-1','Sitapura,Jaipur'),
+(9,'Aakash Tanwar','aakasht@navbackoffice.com','aakasht','IT','Intern','Backoffice Center-1','Sitapura,Jaipur'),
+(10,'Ayush Goyal','ayushg@navbackoffice.com','ayushg','IT','Software Engineer','Backoffice Center-1','Sitapura,Jaipur'),
+(11,'Tushar Bansal','tusharb@navbackoffice.com','tusharb','IT','Trainee Software Engineer','Backoffice Center-1','Sitapura,Jaipur'),
+(12,'Chirag Sharma','chirags@navbackoffice.com','chirags','IT','Tech Lead','Backoffice Center-1','Sitapura,Jaipur'),
+(13,'Honey Singhal','honeys@navbackoffice.com','honeys','IT','Senior Software Engineer','Backoffice Center-1','Sitapura,Jaipur'),
+(14,'Suyash Pathak','suyashp@navbackoffice.com','suyashp','IT','Technical Architect','Backoffice Center-1','Sitapura,Jaipur'),
+(15,'Prayag Donariya','prayagd@navbackoffice.com','prayagd','IT','Software Engineer','Backoffice Center-1','Sitapura,Jaipur'),
+(16,'Yash Kumar','yashk@navbackoffice.com','yashk','IT','null','Backoffice Center-1','Sitapura,Jaipur'),
+(17,'Virat Singh','virats@navbackoffice.com','virats','IT','Project Manager','Backoffice Center-1','Sitapura,Jaipur');
 
 delete from TempAd where EmployeeId = 8;
 insert into TempAd values (8,'Priyank Mitra','priyankm@navbackoffice.com','PRIYANK MITRA','IT');

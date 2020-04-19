@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using Microsoft.AspNetCore.Mvc;
 using OrganizationHierarchy.Models;
 namespace OrganizationHierarchy.Controllers
@@ -34,7 +35,7 @@ namespace OrganizationHierarchy.Controllers
                 string imreBase64Data = Convert.ToBase64String(item.Profilepic);
                 profilepicPath = string.Format("data:image/png;base64,{0}", imreBase64Data);
 
-
+                Console.WriteLine(item);
                 UserInformation user = new UserInformation();
 
 
@@ -111,36 +112,23 @@ namespace OrganizationHierarchy.Controllers
                 context.SaveChanges();
                 return 1;
             }
-            else if (userPresentInRegistrationTableOrNot(user.EmployeeUsername) > 0 && (GetRegistration() == 0))
+            else if (userPresentInRegistrationTableOrNot(user.EmployeeUsername) > 0 && ((GetRegistration() == 0) || (GetRegistration() == 1)))
             {
-                var updatedUser = context.RegisteredUsers.Find(user.EmployeeUsername);
-                updatedUser.EmployeeId = user.EmployeeId;
-                updatedUser.DisplayName = user.DisplayName;
-                updatedUser.Email = user.Email;
-                updatedUser.DepartmentId = user.DepartmentId;
-                updatedUser.DesignationId = user.DesignationId;
-                updatedUser.OfficeId = user.OfficeId;
-                updatedUser.Profilepic = null; // user.Profilepic;
-                updatedUser.ReportingManagerUsername = user.ReportingManagerUsername;
-                updatedUser.UserRegisteredOrNot = 1;
-
+                context.RegisteredUsers.Remove(context.RegisteredUsers.FirstOrDefault(e => e.EmployeeUsername == user.EmployeeUsername));
+                context.SaveChanges();
+                context.RegisteredUsers.Add(user);
                 context.SaveChanges();
                 return 1;
             }
+            
             return 0;
         }
 
         [HttpPost]
         [Route("registerUser")]
         public async System.Threading.Tasks.Task<int> PostAsync([FromForm]UserInformation user)
-        {/*
-            MyImages image = new MyImages { ImagePath = user1.Profilepic };
+        {
             
-            Image_Context imgdb = new Image_Context();
-            
-            imgdb.MyImages.Add(image);
-            imgdb.SaveChanges();*/
-            //System.Diagnostics.Debug.WriteLine(user.DepartmentName.ToString());
             int departmentid = context.DepartmentInformation.Where(x => x.DepartmentName.Contains(user.DepartmentName)).FirstOrDefault().DepartmentId;
             int designationId = context.DesignationInformation.Where(x => x.Designation.Contains(user.Designation)).FirstOrDefault().DesignationId;
             int officeid = context.OfficeInformation.Where(x => x.OfficeName.Contains(user.Office)).FirstOrDefault().OfficeId;
@@ -176,6 +164,7 @@ namespace OrganizationHierarchy.Controllers
                 manager.OfficeId = 0;
                 manager.DepartmentId = 0;
                 manager.DesignationId = 0;
+                manager.Profilepic = Array.Empty<byte>();
                 manager.ReportingManagerUsername = "sudhag";
 
                 context.RegisteredUsers.Add(manager);
@@ -183,5 +172,27 @@ namespace OrganizationHierarchy.Controllers
                 return RegisterNewUser(registeruser);
             }
         }
+
+        [HttpGet]
+        [Route("rm_data")]
+        public List<RMDATA> GetRmData()
+        {
+            List<RMDATA> rm_data = new List<RMDATA>();
+
+            foreach (var user in context.TempAd)
+            {
+
+                RMDATA rm = new RMDATA();
+                rm.DisplayName = user.DisplayName;
+                rm.EmployeeId = user.EmployeeId;
+                rm.EmployeeUsername = user.EmployeeUsername;
+
+                rm_data.Add(rm);
+
+            }
+
+            return rm_data;
+        }
+
+        }
     }
-}
