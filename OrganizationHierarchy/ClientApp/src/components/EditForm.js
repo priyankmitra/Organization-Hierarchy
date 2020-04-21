@@ -80,7 +80,7 @@ export class EditForm extends Component {
                     <label>Department Name</label>
                     <Input readOnly="" type='department' name='DepartmentName' placeholder='enter department name' defaultValue={this.state.DepartmentName} onChange={this.handleChange} />
                 </Form.Field>
-                <Form.Field fluid label='ReportingManagerUsername' name='ReportingManagerUserName' control='select' onChange={this.handleChange}>
+                <Form.Field fluid label='ReportingManagerUsername' required name='ReportingManagerUserName' control='select' defaultValue="hello" onChange={this.handleChange}>
                     <option value=''>Select Reporting Manager</option>
                     {this.state.RmList.map(rm =>
 

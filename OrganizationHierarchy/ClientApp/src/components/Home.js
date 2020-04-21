@@ -1,41 +1,28 @@
 import React, { Component } from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
+import { Button, Header, Image, Modal, Icon, Card } from 'semantic-ui-react';
+import "./Home.css";
+
 import { AddButton } from './AddButton';
 import { EditForm } from './EditForm';
-import { Modal, Button, Row, Col, Form } from 'react-bootstrap';
-import "./Home.css";
-import { PostCard } from './PostCard';
+import PostCardModal from './PostCardModal';
+import EditFormModal from './EditFormModal';
 
-import {
-    BrowserRouter as Router,
-    Switch,
-    Route,
-    Link
-} from "react-router-dom";
 
 require('highcharts/modules/sankey')(Highcharts);
 require('highcharts/modules/organization')(Highcharts);
 require('highcharts/modules/exporting')(Highcharts);
 require('highcharts/modules/accessibility')(Highcharts);
 
-var showPostCard = false;
-
-const postCardDetails = {
-    Name: "",
-    Title: "",
-    Email: "",
-    Office: ""
-}
-
 const constOptions = {
     chart: {
-        height: 900,
+        height: 600,
         inverted: true
     },
 
     title: {
-        text: 'NAV Organization Hierarchy'
+        text: ""
     },
 
     accessibility: {
@@ -55,17 +42,7 @@ const constOptions = {
             point: {
                 events: {
                     click: function () {
-                        this.showpostcard = 1;
-                        console.log(this.showpostcard);
-                        Popup(this);
-                        /*alert('\nName:        ' + this.id + '\nTitle:          ' + this.title
-                            + '\nEmail:         ' + this.email + '\nOffice:        '+this.office);
-                        postCardDetails.Name =  this.id;
-                        postCardDetails.Title = this.title;
-                        postCardDetails.Email= this.email;
-                        postCardDetails.Office = this.office;
-                        showPostCard = true;*/
-                        
+                        Popup(this.options);
                     }
                 }
             }
@@ -73,8 +50,8 @@ const constOptions = {
     },
     series: [{
         type: 'organization',
-        name: 'Highsoft',/*
-        linkRadius: 0,
+        name: 'Highsoft',
+        /*linkRadius: 0,
         linkLineWidth: 2,*/
         keys: ['from', 'to'],
         data: [["NAV", "Sudha Gupta"],
@@ -95,7 +72,7 @@ const constOptions = {
             height: 25
         }, {
             level: 2,
-            color: '#980104'
+            color: '#980103'
 
         }, {
             level: 4,
@@ -108,7 +85,7 @@ const constOptions = {
             color: 'white'
         },
         borderColor: 'white',
-        nodeWidth: 90
+        nodeWidth: 80
     }],
     tooltip:
     {
@@ -123,35 +100,23 @@ const constOptions = {
 
 }
 
-
-/*
-function Show(props) {
-    return (*//*
-        <Router>
-        <div>
-                <Route path='/postcard'>*//*
-                    <PostCard />
-               *//* </Route>
-        </div>
-        </Router>*//*
-    );
-}*/
-
-
-function Popup(props) {
-
-
-
-        /*return (
-            <PostCard showpostcard={props.showpostcard} / >
-        );*/
+function Popup(props) {        
+    this.setState({
+        showPopup: true,
+        image: props.image,
+        name: props.name,
+        email : props.email,
+        designation:props.title,
+        department:props.description,
+        office: props.office
+    })
+    
 }
 
 function DisplayChart(props) {
     return (
-        <figure class="highcharts-figure">
+        <figure className="highcharts-figure">
             <div id="container">
-
                 <HighchartsReact highcharts={Highcharts} options={props.stateOptions} />
             </div>
         </figure>
@@ -164,16 +129,16 @@ export class Home extends Component {
         super(props);
         this.state = {
             relation: [], userNodes: [], stateOptions: {}, isUserRgistered: this.props.isUserRegistered,
-            showEditForm: false , showPopup:false
+            showEditForm: false, showPopup: false,
+            employeeId: "", image: "", name: "", email: "", designation: "", department: "", office: "",
+
         }
         this.handleSubmit = this.handleSubmit.bind(this);
+        Popup = Popup.bind(this);
     }
 
     componentDidMount() {
-        console.log("data ayega");
         this.populateRegisteredUserData();
-        console.log("data aagaya");
-
     }
 
     handleSubmit() {
@@ -181,13 +146,40 @@ export class Home extends Component {
             showEditForm: true
         })
     }
-
+    
+   
     render() {
-        
-        return this.state.showEditForm ? <EditForm /> : <div>
-            <Button onClick={this.handleSubmit} > Edit and Sync </Button>
-            <DisplayChart relationData={this.state.relation} nodeData={this.state.userNodes} stateOptions={this.state.stateOptions} />
-        </div>;
+        return (
+            <div>
+                <Button onClick={this.handleSubmit}  > Sync and Edit </Button>
+                <EditFormModal
+                    modalOpen={this.state.showEditForm}
+                    handleClose={
+                        () => {
+                            this.setState({ showEditForm: false })
+                        }
+                    }
+
+                />
+
+                <PostCardModal 
+                    modalOpen={this.state.showPopup}
+                    handleClose={
+                        () => {
+                            this.setState({ showPopup: false })
+                        }
+                    }
+                    image={this.state.image}
+                    name={this.state.name}
+                    email={this.state.email}
+                    designation={this.state.designation}
+                    department={this.state.department}
+                    office={this.state.office}
+                    reportingManager={this.state.reportingManager}
+                />
+                <DisplayChart relationData={this.state.relation} nodeData={this.state.userNodes} stateOptions={this.state.stateOptions} />
+            </div>
+            );
         
     }
 
@@ -222,7 +214,7 @@ export class Home extends Component {
             singleUser.email = data[i].email;
             singleUser.office = data[i].office;
             singleUser.image = data[i].profilepicPath;
-            singleUser.showpostcard = 0;
+            singleUser.reportingManager = data[i].reportingManagerUsername;
             allUsers.push(singleUser);
         }
 

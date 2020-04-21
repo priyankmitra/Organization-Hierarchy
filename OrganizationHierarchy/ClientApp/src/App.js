@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Route } from 'react-router';
 import { Layout } from './components/Layout';
 import { Home } from './components/Home';
-import { AddButton } from './components/AddButton';
+import { RegistrationForm } from './components/RegistrationForm';
 
 import './custom.css'
 
@@ -26,7 +26,7 @@ export default class App extends Component {
             return (
                 <div>
                     <Layout username={this.state.username} />
-                    <AddButton />
+                    <RegistrationForm />
                 </div>
             );
         }

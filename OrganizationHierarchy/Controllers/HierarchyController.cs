@@ -50,7 +50,7 @@ namespace OrganizationHierarchy.Controllers
                 user.Designation = db.DesignationInformation.Where(x => x.DesignationId.Equals(item.DesignationId)).FirstOrDefault().Designation; //item.Designation.Designation,
                 user.Office = db.OfficeInformation.Where(x => x.OfficeId.Equals(item.OfficeId)).FirstOrDefault().OfficeName;//item.Office.OfficeName,
 
-                
+
                 result.Add(user);
                 db.Dispose();
 
@@ -120,7 +120,7 @@ namespace OrganizationHierarchy.Controllers
                 context.SaveChanges();
                 return 1;
             }
-            
+
             return 0;
         }
 
@@ -128,7 +128,7 @@ namespace OrganizationHierarchy.Controllers
         [Route("registerUser")]
         public async System.Threading.Tasks.Task<int> PostAsync([FromForm]UserInformation user)
         {
-            
+
             int departmentid = context.DepartmentInformation.Where(x => x.DepartmentName.Contains(user.DepartmentName)).FirstOrDefault().DepartmentId;
             int designationId = context.DesignationInformation.Where(x => x.Designation.Contains(user.Designation)).FirstOrDefault().DesignationId;
             int officeid = context.OfficeInformation.Where(x => x.OfficeName.Contains(user.Office)).FirstOrDefault().OfficeId;
@@ -194,5 +194,5 @@ namespace OrganizationHierarchy.Controllers
             return rm_data;
         }
 
-        }
     }
+}
